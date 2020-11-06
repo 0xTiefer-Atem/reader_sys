@@ -3,6 +3,8 @@
 """
 from db import db_hanlder
 
+login_user = None
+
 
 # 注册功能
 def register():
@@ -38,6 +40,30 @@ def register():
 # 登陆功能
 def login():
     print("登录功能执行中")
+    while True:
+        user_name = input("请输入用户名 (输入q退出): ").strip()
+
+        # 1)先校验用户是否存在
+        user_data = db_hanlder.select(user_name)
+
+        # 2)若不存在,让用户重新输入
+        if not user_data:
+            print("当前用户不存在,请重新输入")
+            continue
+
+        user_pwd = input("请输入密码: ").strip()
+
+        # 3)检验密码是否正确
+        if user_pwd == user_data[1]:
+
+            # 4)登陆成功后记录登陆状态
+            global login_user
+            login_user = user_name
+
+            print("{} 用户登录成功".format(user_name))
+            break
+        else:
+            print("密码错误, 登陆失败")
 
 
 # 充值功能
