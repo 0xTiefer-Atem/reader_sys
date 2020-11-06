@@ -1,49 +1,7 @@
 """
 此处存放核心业务逻辑代码
 """
-import os
-
-# 获取项目根目录
-BASE_PATH = os.path.dirname(os.path.dirname(__file__))
-
-# 获取db目录路径
-DB_PATH = os.path.join(BASE_PATH, 'db')
-
-# db.txt的根目录
-DB_TXT_PATH = os.path.join(DB_PATH, 'db.txt')
-
-
-# 查看数据
-def select(user_name):
-    """
-    - 接收用户输入的用户名
-    - 若该用户存在, 则返回当前用户的所有数据
-    - 若不存在, 则返回None
-    :param user_name:
-    :return:
-    """
-
-    with open(DB_TXT_PATH, mode='rt', encoding='utf-8') as account_file:
-        # 获取db.txt文件中的每一行数据
-        for line in account_file:
-            # 判断接收过来的用户名是否存在db.txt文件中
-            if user_name in line:
-                # 若用户存在,则在当前行中提取该用户的所有数据
-                user_data = line.strip().split(":")
-                return user_data
-        return None
-
-
-# 保存数据
-def save(user_name, user_pwd, balance=0):
-    """
-    :param user_name: 注册用户名
-    :param user_pwd: 注册密码
-    :param balance: 注册用户初始金额设置为默认值
-    :return:
-    """
-    with open(DB_TXT_PATH, 'a', encoding='utf-8') as save_account:
-        save_account.write('{}:{}:{}\n'.format(user_name, user_pwd, balance))
+from db import db_hanlder
 
 
 # 注册功能
@@ -57,7 +15,7 @@ def register():
         # 1)先校验用户是否存在
         # 涉及数据操作: 查看数据
         # 传入当前用户名,查看当前用户是否存在
-        user_data = select(user_name)
+        user_data = db_hanlder.select(user_name)
 
         # 2)若不存在,让用户重新输入
         if user_data:
@@ -70,7 +28,7 @@ def register():
         # 3)检验两次密码是否一致
         if user_pwd == re_user_pwd:
             # 4)将当前用户写入文件中
-            save(user_name, user_pwd)
+            db_hanlder.save(user_name, user_pwd)
             print("{} 用户注册成功".format(user_name))
             break
         else:
