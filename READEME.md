@@ -7,12 +7,14 @@
             
         - conf
             - settings.py --> 配置文件
+                - 比如存放一些固定的路径
             
         - core
             - src --> 核心业务逻辑代码
             
         - db --> 用于存放数据文件与操作数据的代码文件
             - db_file --> db.txt
+            
             - db_handler.py --> 操作数据的代码
         
         - lib
