@@ -3,6 +3,7 @@
 """
 from db import db_hanlder
 from lib import common
+import time
 
 # 若能进入该函数, 证明用户已经登录, 能获取到当前用户名
 login_user = None
@@ -104,6 +105,11 @@ def charge():
         # 3.5) 调用修改数据功能
         db_hanlder.update(old_user_data, new_user_data)
         print("当前用户 {} 充值金额 [{}元] 成功".format(login_user, balance))
+
+        # 记录充值日志
+        now_time = time.strftime('%Y-%m-%d %X')
+        log_data = f'时间: {now_time} 用户: {login_user} 充值金额: {balance}'
+        common.append_log(log_data)
         break
 
 
@@ -196,6 +202,11 @@ def read_novel():
                     ====
                     """
                 )
+
+                # 记录购买日志
+                now_time = time.strftime('%Y-%m-%d %X')
+                log_data = f'时间: {now_time} 用户: {login_user} 消费金额: {price}'
+                common.append_log(log_data)
         break
 
 
